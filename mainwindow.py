@@ -7,7 +7,6 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -23,6 +22,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.groupBox)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.btn1_1 = QtWidgets.QPushButton(self.groupBox)
+        self.btn1_1.setObjectName("pushButton")
+        self.btn1_1.clicked.connect(pushButton_pushedbtn1_1)
         self.btn1_1.setMinimumSize(QtCore.QSize(0, 50))
         self.btn1_1.setObjectName("btn1_1")
         self.verticalLayout_3.addWidget(self.btn1_1)
@@ -32,6 +33,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.groupBox_2)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.btn2_1 = QtWidgets.QPushButton(self.groupBox_2)
+        self.btn2_1.setObjectName("pushButton")
+        self.btn2_1.clicked.connect(pushButton_pushedbtn2_1)
         self.btn2_1.setMinimumSize(QtCore.QSize(0, 50))
         self.btn2_1.setObjectName("btn2_1")
         self.verticalLayout_4.addWidget(self.btn2_1)
@@ -44,10 +47,14 @@ class Ui_MainWindow(object):
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.groupBox_3)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.btn3_1 = QtWidgets.QPushButton(self.groupBox_3)
+        self.btn3_1.setObjectName("pushButton")
+        self.btn3_1.clicked.connect(pushButton_pushedbtn3_1)
         self.btn3_1.setMinimumSize(QtCore.QSize(0, 50))
         self.btn3_1.setObjectName("btn3_1")
         self.verticalLayout_5.addWidget(self.btn3_1)
         self.btn3_2 = QtWidgets.QPushButton(self.groupBox_3)
+        self.btn3_2.setObjectName("pushButton")
+        self.btn3_2.clicked.connect(pushButton_pushedbtn3_2)
         self.btn3_2.setMinimumSize(QtCore.QSize(0, 50))
         self.btn3_2.setObjectName("btn3_2")
         self.verticalLayout_5.addWidget(self.btn3_2)
@@ -57,6 +64,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.groupBox_4)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.btn4_1 = QtWidgets.QPushButton(self.groupBox_4)
+        self.btn4_1.setObjectName("pushButton")
+        self.btn4_1.clicked.connect(pushButton_pushedbtn4_1)
         self.btn4_1.setMinimumSize(QtCore.QSize(0, 50))
         self.btn4_1.setObjectName("btn4_1")
         self.verticalLayout_6.addWidget(self.btn4_1)
@@ -83,3 +92,29 @@ class Ui_MainWindow(object):
         self.groupBox_4.setTitle(_translate("MainWindow", "4. Augmented Reality"))
         self.btn4_1.setText(_translate("MainWindow", "4.1 Augmented Reality"))
 
+
+class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+    def __init__(self, parent=None):
+        QtWidgets.QMainWindow.__init__(self, parent=parent)
+        self.setupUi(self)
+
+    def keyPressEvent(self, e):
+        if e.key() == QtCore.Qt.Key_F5:
+            self.close()
+
+
+def pushButton_pushedbtn1_1(self):
+    print("btn1_1")
+
+
+def pushButton_pushedbtn2_1(self):
+    print("btn2_1")
+
+def pushButton_pushedbtn3_1(self):
+    print("btn3_1")
+
+def pushButton_pushedbtn3_2(self):
+    print("btn3_2")
+
+def pushButton_pushedbtn4_1(self):
+    print("btn4_1")
