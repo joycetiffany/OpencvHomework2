@@ -8,7 +8,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import numpy as np
-from sklearn.preprocessing import normalize
 import cv2
 from matplotlib import pyplot as plt
 
@@ -109,11 +108,35 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
 def pushButton_pushedbtn1_1(self):
-    imgL = cv2.imread('imL.png',0)
-    imgR = cv2.imread('imR.png',0)
-    stereo = cv2.StereoBM_create(numDisparities=64, blockSize=9)
-    disparity = stereo.compute(imgL,imgR)
-    cv2.imshow('Disparity Map', disparity)
+    imgR = cv2.imread('imR.png',1)
+    imgL = cv2.imread('imL.png',1)
+    window_size = 9
+    min_disp = 13
+    num_disp = 109 - min_disp
+    blockSize = 14
+    uniquenessRatio = 0
+    speckleRange = 3
+    speckleWindowSize = 0
+    disp12MaxDiff = 28
+    P1 = 8 * 3 * window_size ** 2
+    P2 = 32 * 3 * window_size ** 2
+    # stereo = cv2.StereoBM_create(64, 9)
+    stereo = cv2.StereoSGBM_create(
+        minDisparity=min_disp,
+        numDisparities=num_disp,
+        blockSize=blockSize,
+        uniquenessRatio=uniquenessRatio,
+        speckleRange=speckleRange,
+        speckleWindowSize=speckleWindowSize,
+        disp12MaxDiff=disp12MaxDiff,
+        P1=P1,
+        P2=P2
+    )
+    disp = stereo.compute(imgL, imgR).astype(np.float32) / 8.0
+    cv2.imshow('left', imgL)
+    cv2.imshow('disparity', (disp - min_disp) / num_disp)
+    # disparity = stereo.compute(imgL,imgR)
+    # cv2.imshow('gray', disparity)
     cv2.waitKey()
     cv2.destroyAllWindows()
 
