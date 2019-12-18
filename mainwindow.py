@@ -7,6 +7,11 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import numpy as np
+from sklearn.preprocessing import normalize
+import cv2
+from matplotlib import pyplot as plt
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -104,8 +109,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
 def pushButton_pushedbtn1_1(self):
-    print("btn1_1")
-
+    imgL = cv2.imread('imL.png',0)
+    imgR = cv2.imread('imR.png',0)
+    stereo = cv2.StereoBM_create(numDisparities=64, blockSize=9)
+    disparity = stereo.compute(imgL,imgR)
+    cv2.imshow('Disparity Map', disparity)
+    cv2.waitKey()
+    cv2.destroyAllWindows()
 
 def pushButton_pushedbtn2_1(self):
     print("btn2_1")
@@ -118,3 +128,6 @@ def pushButton_pushedbtn3_2(self):
 
 def pushButton_pushedbtn4_1(self):
     print("btn4_1")
+
+
+
