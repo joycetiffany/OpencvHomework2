@@ -10,6 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
+import glob
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -150,7 +151,51 @@ def pushButton_pushedbtn3_2(self):
     print("btn3_2")
 
 def pushButton_pushedbtn4_1(self):
-    print("btn4_1")
+    pam = np.load('cdata.npz')
+    mtx = pam['arr_0']
+    dist = pam['arr_1']
+
+    objp = np.zeros((11 * 8, 3), np.float32)
+    objp[:, :2] = np.mgrid[0:11, 0:8].T.reshape(-1, 2) * 10
+    axis = np.float32([[5, 5, 0], [1, 5, 0], [1, 1, 0], [5, 1, 0],
+                       [3, 3, -4]]) * 10
+
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+
+    def draw(img, corners, imgpts):
+        imgpts = np.int32(imgpts).reshape(-1, 2)
+
+
+        # draw in red color
+        img = cv2.polylines(img, [np.int32(imgpts[0:])], True, tuple([255, 0, 0]), 15, cv2.LINE_AA)
+        img = cv2.polylines(img, [np.int32(imgpts[1:])], True, tuple([0, 255, 0]), 15, cv2.LINE_AA)
+        img = cv2.polylines(img, [np.int32(imgpts[2:])], True, tuple([0, 0, 255]), 15, cv2.LINE_AA)
+        img = cv2.polylines(img, [np.int32(imgpts[:4])], True, tuple([125, 125, 0]), 15, cv2.LINE_AA)
+
+        return img
+
+
+    for fname in glob.glob("*.bmp"):
+
+        img = cv2.imread(fname)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        ret, corners = cv2.findChessboardCorners(gray, (11, 8), None)
+        if ret == True:
+            corners2 = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
+
+            # Find the rotation and translation vectors.
+            ret, rvecs, tvecs, inliers = cv2.solvePnPRansac(objp, corners2, mtx, dist)
+            # print(ret)
+
+            # project 3D points to image plane
+            imgpts, jac = cv2.projectPoints(axis, rvecs, tvecs, mtx, dist)
+
+            img = draw(img, corners2, imgpts)
+            plt.imshow(img)
+            plt.ion()
+            plt.pause(1)
+            plt.close()
+
 
 
 
