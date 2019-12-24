@@ -142,7 +142,39 @@ def pushButton_pushedbtn1_1(self):
     cv2.destroyAllWindows()
 
 def pushButton_pushedbtn2_1(self):
-    print("btn2_1")
+    # coding=utf-8
+    #from http://zhaoxuhui.top/blog/2017/06/30/%E5%9F%BA%E4%BA%8EPython%E7%9A%84OpenCV%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%8618.html?fbclid=IwAR0qkAOeum09y-qLVA2OxaR_lklV2xo0Y2tWqBH5q_D_oeoRdwxOi7H_kLc
+    import cv2
+
+    path = 'bgSub.mp4'
+
+    cap = cv2.VideoCapture(path)
+
+    # 建立KNN背景去除對象
+    fgbg = cv2.createBackgroundSubtractorKNN()
+
+    # 建立一個卷積kernel
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+
+    while 1:
+        ret, frame = cap.read()
+        if frame is None:
+            cv2.waitKey(0)
+            break
+        else:
+            # 應用演算法到每個frame
+            fgmask = fgbg.apply(frame)
+            # 去除噪聲
+            fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
+
+            cv2.imshow('frame', fgmask)
+
+            k = cv2.waitKey(30) & 0xff
+            if k == 27:
+                break
+
+    cap.release()
+    cv2.destroyAllWindows()
 
 def pushButton_pushedbtn3_1(self):
     print("btn3_1")
